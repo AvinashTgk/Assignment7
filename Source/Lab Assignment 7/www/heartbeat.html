@@ -1,0 +1,112 @@
+    <script src="js/app1.js">
+angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services',])
+
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.disableScroll(true);
+    }
+    if (window.StatusBar) {
+      // org.apache.cordova.statusbar required
+      StatusBar.styleDefault();
+    }
+  });
+})
+
+  .controller('Hypertension', function($scope){
+    $scope.diaDetectLogic = function(sbp,dbp) {
+      // Do some computation..
+      var sbpValue=parseFloat(sbp);
+      console.log(sbpValue);
+      var dbpValue=parseFloat(dbp);
+      console.log(dbpValue);
+      if(sbpValue<110 && dbpValue<140){
+        return {
+          "classNameForResult": "card",
+          "classNameForSuggestion": "bar bar-footer bar-balanced",
+          "results": "Normal : You don't have hypertension."
+        }
+      }
+
+      if(sbpValue>=120 && sbpValue<=139 && dbpValue<90)
+        return{
+          "classNameForResult": "card",
+          "classNameForSuggestion": "bar bar-footer bar-balanced",
+          "results": "You have Pre-Hypertension."
+        }
+
+      if(sbpValue>=140 && sbpValue<=159 && dbpValue>=100)
+        return{
+          "classNameForResult": "card",
+          "classNameForSuggestion": "bar bar-footer bar-balanced",
+          "results": "You have State 1 Hypertension."
+        }
+
+
+      if(sbpValue>=160 && sbpValue<=179 && dbpValue>=110)
+        return{
+          "classNameForResult": "card",
+          "classNameForSuggestion": "bar bar-footer bar-balanced",
+          "results": "You have State 2 Hypertension."
+        }
+
+      if (sbpValue>=180 || dbpValue>=110)
+        return{
+          "classNameForResult": "card",
+          "classNameForSuggestion": "bar bar-footer bar-balanced",
+          "results":"You have stage 3 Hypertension (severe)."
+        }
+    }
+
+    $scope.diaDetectView = function(style) {
+      document.getElementById("result").className = style["classNameForResult"];      document.getElementById("suggestion").className=style["classNameForSuggestion"];
+      console.log(style["classNameForSuggestion"]);
+      document.getElementById("result").innerHTML=style["results"];
+
+    }
+  });
+</script>
+
+<style>
+  .pane {
+    background: url("../img/8yWFeLCmR9mGqc5Hpjpi_water-wallpaper-and-water-background-1.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    background-size: cover;
+  }
+</style>
+<style>
+  .reg{
+    background-image: url("../img/8yWFeLCmR9mGqc5Hpjpi_water-wallpaper-and-water-background-1.jpg");
+  }
+</style>
+
+
+<ion-view title="Detect Blood Pressure" id="page4" class="pane">
+    <ion-content padding="true" class="has-header" style="align-content: center">
+        <form id="detectBloodPressure-form7" class="list">
+            <label class="item item-input" id="detectBloodPressure-input13">
+                <span class="input-label">Systolic Blood Pressure :</span>
+                <!--<input type="text" placeholder="">-->
+            </label>
+            <div class="spacer" style="width: 300px; height: 9px;"></div>
+            <label class="item item-input" id="detectBloodPressure-input14" ng-model="diaParameterF">
+                <input type="number" placeholder="">
+            </label>
+            <div class="spacer" style="width: 300px; height: 34px;"></div>
+            <label class="item item-input" id="detectBloodPressure-input15">
+                <span class="input-label">Diastolic Blood Pressure :</span>
+                <!--<input type="text" placeholder="">-->
+            </label>
+            <div class="spacer" style="width: 300px; height: 7px;"></div>
+            <label class="item item-input" id="detectBloodPressure-input16" ng-model="diaParameter2H">
+                <input type="number" placeholder="">
+            </label>
+        </form>
+        <button id="detectBloodPressure-button6" style="border-radius:30px 30px 30px 30px;" class="button button-assertive  button-block" onclick="controller(diaDetectLogic(diaParameterF,diaParameter2H))" ng-click="diaDetectView(diaDetectLogic(diaParameterF,diaParameter2H))"> Detect </button>
+        <div class="spacer" style="width: 300px; height: 78px;"></div>
+        <button id="detectBloodPressure-button7" style="border-radius:30px 30px 30px 30px;" class="button button-dark  button-block">Suggestion</button>
+    </ion-content>
+</ion-view>
